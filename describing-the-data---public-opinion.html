@@ -23,7 +23,7 @@
 <meta name="author" content="Boris Shor" />
 
 
-<meta name="date" content="2022-09-14" />
+<meta name="date" content="2022-09-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -180,6 +180,7 @@ div.csl-indent {
 <li class="chapter" data-level="7.3" data-path="describing-the-data---public-opinion.html"><a href="describing-the-data---public-opinion.html#validating-the-measures"><i class="fa fa-check"></i><b>7.3</b> Validating the measures</a>
 <ul>
 <li class="chapter" data-level="7.3.1" data-path="describing-the-data---public-opinion.html"><a href="describing-the-data---public-opinion.html#predicting-issue-opinion"><i class="fa fa-check"></i><b>7.3.1</b> Predicting issue opinion</a></li>
+<li class="chapter" data-level="7.3.2" data-path="describing-the-data---public-opinion.html"><a href="describing-the-data---public-opinion.html#placebo-test"><i class="fa fa-check"></i><b>7.3.2</b> Placebo Test</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="bill-models.html"><a href="bill-models.html"><i class="fa fa-check"></i><b>8</b> Bill Models</a>
@@ -225,7 +226,7 @@ div.csl-indent {
 <h1><span class="header-section-number">Chapter 7</span> Describing the Data - Public Opinion<a href="describing-the-data---public-opinion.html#describing-the-data---public-opinion" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="data" class="section level2 hasAnchor" number="7.1">
 <h2><span class="header-section-number">7.1</span> Data<a href="describing-the-data---public-opinion.html#data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Four waves of surveys have been conducted over the 2018-2022 time period, with a total of 15,572 respondents. Across all four waves, a total of 45 dichotomous survey responses about health-related policy issues, and 94 dichotomous survey responses about non-health related policy issues were asked.</p>
+<p>Four waves of surveys have been conducted over the 2018-2022 time period, with a total of 15,572 respondents. Across all four waves, a total of 45 dichotomous survey responses about health-related policy issues, and 104 dichotomous survey responses about non-health related policy issues were asked. Of course, these questions were not all asked at the same time. The median number of health related questions that were answered was 16 (and 38 for non-health related questions).</p>
 </div>
 <div id="self-reported-vs-latent" class="section level2 hasAnchor" number="7.2">
 <h2><span class="header-section-number">7.2</span> Self-reported vs Latent<a href="describing-the-data---public-opinion.html#self-reported-vs-latent" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -233,9 +234,9 @@ div.csl-indent {
 </div>
 <div id="validating-the-measures" class="section level2 hasAnchor" number="7.3">
 <h2><span class="header-section-number">7.3</span> Validating the measures<a href="describing-the-data---public-opinion.html#validating-the-measures" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Table <a href="describing-the-data---public-opinion.html#tab:ideol-corr">7.1</a> shows the correlations between the two self-reported measures of three-category party identification (Democrat, Republican, or true Independent<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>) and seven-category symbolic ideology (from strong liberal, or 1, to strong conservative, or 7), as well as the two latent measures of ideology.</p>
+<p>Table <a href="describing-the-data---public-opinion.html#tab:ideol-corr">7.1</a> shows the correlations between the two self-reported measures of three-category party identification (Democrat, Republican, or true Independent<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>) and seven-category symbolic ideology (from strong liberal, or 1, to strong conservative, or 7), as well as the two latent measures of ideology.</p>
 <p>The correlations are all in the expected range. Partisanship is strongly correlated with ideology, both symbolic and latent. Symbolic and latent ideology are also strongly correlated with each other.</p>
-<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto; width: auto !important; margin-left: auto; margin-right: auto;">
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:ideol-corr">Table 7.1: </span>Correlations between latent and self-reported measures of party and ideology
 </caption>
@@ -253,7 +254,7 @@ Self-Reported Ideology
 Latent Health Ideology
 </th>
 <th style="text-align:right;">
-Latent Non-Health Ideology
+Latent Nonhealth Ideology
 </th>
 </tr>
 </thead>
@@ -262,16 +263,16 @@ Latent Non-Health Ideology
 <td style="text-align:left;width: 1.5in; ">
 Party ID
 </td>
-<td style="text-align:right;width: 1.5in; ">
+<td style="text-align:right;width: 0.75in; ">
 1
 </td>
-<td style="text-align:right;width: 1.5in; ">
+<td style="text-align:right;width: 0.75in; ">
 .
 </td>
-<td style="text-align:right;width: 1.5in; ">
+<td style="text-align:right;width: 0.75in; ">
 .
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 0.75in; ">
 .
 </td>
 </tr>
@@ -279,16 +280,16 @@ Party ID
 <td style="text-align:left;width: 1.5in; ">
 Self-Reported Ideology
 </td>
-<td style="text-align:right;width: 1.5in; ">
+<td style="text-align:right;width: 0.75in; ">
 .67
 </td>
-<td style="text-align:right;width: 1.5in; ">
+<td style="text-align:right;width: 0.75in; ">
 1
 </td>
-<td style="text-align:right;width: 1.5in; ">
+<td style="text-align:right;width: 0.75in; ">
 .
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 0.75in; ">
 .
 </td>
 </tr>
@@ -296,33 +297,33 @@ Self-Reported Ideology
 <td style="text-align:left;width: 1.5in; ">
 Latent Health Ideology
 </td>
-<td style="text-align:right;width: 1.5in; ">
+<td style="text-align:right;width: 0.75in; ">
 .51
 </td>
-<td style="text-align:right;width: 1.5in; ">
+<td style="text-align:right;width: 0.75in; ">
 .52
 </td>
-<td style="text-align:right;width: 1.5in; ">
+<td style="text-align:right;width: 0.75in; ">
 1
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 0.75in; ">
 .
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 1.5in; ">
-Latent Non-Health Ideology
+Latent Nonhealth Ideology
 </td>
-<td style="text-align:right;width: 1.5in; ">
+<td style="text-align:right;width: 0.75in; ">
 .63
 </td>
-<td style="text-align:right;width: 1.5in; ">
+<td style="text-align:right;width: 0.75in; ">
 .67
 </td>
-<td style="text-align:right;width: 1.5in; ">
+<td style="text-align:right;width: 0.75in; ">
 .65
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 0.75in; ">
 1
 </td>
 </tr>
@@ -663,10 +664,13 @@ RMSE
 </tr>
 </tfoot>
 </table>
+</div>
+<div id="placebo-test" class="section level3 hasAnchor" number="7.3.2">
+<h3><span class="header-section-number">7.3.2</span> Placebo Test<a href="describing-the-data---public-opinion.html#placebo-test" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Is health-related ideology always and everywhere a better measure of policy attitudes? Certainly not. See the following set of placebo models as an example. This shows the exact same models as above, except with three non-health related policy measures as dependent variables. These including support for fracking, the death penalty, and concealled carry policy for guns. In all cases, non-health related ideology is strongly positively related with positions on these issues; that is, a respondent who is more conservative on this scale is more likely to take the conservative position on these three hot-button ideological issues. That’s not a surprise. What is surprising is how the sign on health ideology flips in the opposite direction. Here, controlling for non-health ideology, health conservatism predicts a liberal position on these issues. Of course, this weird result is likely a statistical artifact of multicollinearity between the measures. Still, it shows that our health measure works appropriately in the correct context, and–just as important–works poorly in the incorrect context. It has passed the placebo test.</p>
 <table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table">
 <caption>
-<span id="tab:unnamed-chunk-2">Table 7.3: </span>Placebo Issue Opinion Model
+<span id="tab:unnamed-chunk-25">Table 7.3: </span>Placebo Issue Opinion Model
 </caption>
 <thead>
 <tr>
@@ -949,8 +953,8 @@ Jessee, Stephen A. 2012. <em>Ideology and Spatial Voting in American Elections</
 </div>
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p>Leaners are included alongside partisans.<a href="describing-the-data---public-opinion.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<ol start="7">
+<li id="fn7"><p>Leaners are included alongside partisans.<a href="describing-the-data---public-opinion.html#fnref7" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
