@@ -103,7 +103,15 @@
 \usepackage{makecell}
 \usepackage{xcolor}
 \usepackage{siunitx}
-\newcolumntype{d}{S[input-symbols = ()]}
+
+  \newcolumntype{d}{S[
+    input-open-uncertainty=,
+    input-close-uncertainty=,
+    parse-numbers = false,
+    table-align-text-pre=false,
+    table-align-text-post=false
+  ]}
+  
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -120,7 +128,7 @@
 
 \title{Health Policy Reform in the 50 States, 2011-2022}
 \author{Boris Shor}
-\date{2022-09-14}
+\date{2022-11-23}
 
 \begin{document}
 \maketitle
@@ -440,7 +448,7 @@ Scholars have found that health care is an issue owned by Democrats {[}\citet{Pe
 ## # A tibble: 1 x 18
 ##   path             type   size permiss~1 modification_time   user  group devic~2
 ##   <fs::path>       <fct> <fs:> <fs::per> <dttm>              <chr> <chr>   <dbl>
-## 1 ~s summary.Rdata file    855 rw-r--r-- 2022-08-15 17:55:26 boris boris      66
+## 1 ~s summary.Rdata file    361 rw-r--r-- 2022-11-16 15:31:16 boris boris     117
 ## # ... with 10 more variables: hard_links <dbl>, special_device_id <dbl>,
 ## #   inode <dbl>, block_size <dbl>, blocks <dbl>, flags <int>, generation <dbl>,
 ## #   access_time <dttm>, change_time <dttm>, birth_time <dttm>, and abbreviated
@@ -468,8 +476,8 @@ The first of these National Conference of State Legislatures' Health Care Reform
 \toprule
 Subset & Bills & Cmte Roll Calls & Floor Roll Calls & Cmte Votes & Floor Votes\\
 \midrule
-All & 4,465 & 5,822 & 18,722 & 69,459 & 1,441,820\\
-Non-unanimous & 2,652 & 1,752 & 10,485 & 21,751 & 856,648\\
+All & 4,677 & 6,305 & 20,093 & 74,552 & 1,538,446\\
+Non-unanimous & 2,797 & 1,926 & 11,370 & 23,542 & 915,205\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -487,8 +495,8 @@ The NCSL Database is a black box. If it has systematic errors or biases in how i
 \toprule
 Subset & Bills & Cmte Roll Calls & Floor Roll Calls & Cmte Votes & Floor Votes\\
 \midrule
-All & 54,272 & 61,939 & 103,196 & 737,853 & 7,385,325\\
-Non-unanimous & 25,965 & 16,982 & 41,242 & 208,656 & 3,254,954\\
+All & 61,412 & 70,015 & 117,481 & 832,534 & 8,418,975\\
+Non-unanimous & 29,586 & 19,206 & 47,291 & 237,142 & 3,746,793\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -622,22 +630,45 @@ But physicians and hospitals are not enough. What more can we measure gather at 
 \hypertarget{outcomes}{%
 \section{Outcomes}\label{outcomes}}
 
-Most introduced bills fail. In unified party-control legislatures, only about a quarter pass. The failure rate is substantially higher in split legislatures, near 90\%. This is to be expected given that both chambers need to agree on a bill for it to pass.
+We are interested in bill outcomes because we are interested in policy change. Policies change as a function of many things, but one of the most obvious and important is legislation. We will trace bill histories to understand why, when, and how legislation succeeds or fails.
+
+To do so, we allow for differences in outcomes across three types of partisan control: Democratic (unified) majority, Republican (unified) majority, and split majority. In a polarized age, partisanship is the fundamental organizing context for American state legislatures. Unlike Congress, however, these legislatures are usually unified, with a small percentage split.
+
+The basic fact about bills that most introduced bills fail. In unified party-control legislatures, only about a quarter pass. The failure rate is substantially higher in split legislatures, approaching 90\%. This is to be expected given that both chambers need to agree on a bill for it to pass.
 
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-4-1} \caption{Bill Outcomes}\label{fig:unnamed-chunk-4}
-\end{figure}
-
-But what is the content of the bills that pass? Of that minority of bills that pass, moderate bills tend to do very well in all types of legislative context. However, liberal bills do surprisingly well in Republican states, where they constitute only a few percentage points less than do conservative bills. In contrast, liberal bills in Democratic legislatures constitute nearly four times as many passed bills as conservative ones.
-
-\begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-5-1} \caption{Bill Outcomes by Ideology}\label{fig:unnamed-chunk-5}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-4-1} \caption{Bill Outcomes}\label{fig:unnamed-chunk-4}
 \end{figure}
 
 \hypertarget{sponsorship}{%
-\section{Sponsorship}\label{sponsorship}}
+\subsection{Sponsorship}\label{sponsorship}}
 
-We begin our analysis of bills by examining who sponsors them.
+We won't get very far without understanding bill content. Different types of bills succeed and fail at different rates.
+
+We begin our analysis by tracing bill histories as a function of bill content. But this is a big challenge with over 100,000 bills in the data. What we would like to know is what these bills are likely to do if translated into law. As a proxy measure for bill content, I use measures related to the bill sponsors. After all, writing and sponsoring bills is a purposive act (which has been used in the literature as a signal of legislator ideology). Legislators have a policy objective in addition to other reasons they might have for advancing legislation.
+
+\hypertarget{sponsorship-by-party}{%
+\subsection{Sponsorship by Party}\label{sponsorship-by-party}}
+
+The first measure I propose is sponsor partisanship, which I divide into three categories: Democratic-only (D), Republican-only (R), and bipartisan (B). I expect that bills solely sponsored by partisans who match the partisanship of legislatures will be more likely to pass than those who don't match the partisanship. My expectation of bipartisan legislation is that it will do better than minority party-only sponsored bills, but not as well as the majority-party only bills. But this expectation changes for split legislatures, where bipartisanship will be a critical strength to manage the shoals of partisan conflict between the chambers.
+
+Unified partisan legislatures show a native advantage for bill introductions to the majority party, though this advantage is most pronounced for Democratic legislatures. Perhaps unsurprisingly as well, split legislatures are more evenly split in bill sponsorship.
+
+\begin{figure}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-5-1} \caption{Introduced Bills by Sponsor Partisanship}\label{fig:unnamed-chunk-5}
+\end{figure}
+
+What about bills that actually passed? Unsurprisingly again, the modal passed bill in unified legislatures is from the party in control. However, notice the relative success of Democratic bills in Republican legislatures compared with Republican bills in Democratic legislatures. Note, too, the large number of passed bipartisan bills in all types of legislatures.
+
+\begin{figure}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-6-1} \caption{Passed Bill Sponsorship Rates}\label{fig:unnamed-chunk-6}
+\end{figure}
+
+We can see how well bipartisan bills do when we look at hit rate of bills passed by partisanship. In fact, bipartisan bills pass at higher rates in unified majority legislatures than they do in split majority states.
+
+\begin{figure}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-7-1} \caption{Hit Rate of Sponsored Bills}\label{fig:unnamed-chunk-7}
+\end{figure}
 
 \begin{itemize}
 \tightlist
@@ -649,50 +680,31 @@ We begin our analysis of bills by examining who sponsors them.
   Divided into terciles based on all unique legislators
 \end{itemize}
 
-\hypertarget{sponsorship-by-party}{%
-\subsection{Sponsorship by Party}\label{sponsorship-by-party}}
-
-We begin with examining the universe of bill introductions, divided by legislative control: unified Democratic or Republican, and split control.
-
-Unified partisan legislatures show a native advantage for bill introductions to the majority party, though this advantage is most pronounced for Democratic legislatures. Perhaps unsurprisingly as well, split legislatures are more evenly split in bill sponsorship.
-
-\begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-6-1} \caption{Introduced Bills by Sponsor Partisanship}\label{fig:unnamed-chunk-6}
-\end{figure}
-
-What about bills that actually passed? Unsurprisingly again, the modal passed bill in unified legislatures is from the party in control. However, notice the relative success of Democratic bills in Republican legislatures compared with Republican bills in Democratic legislatures. Note, too, the large number of passed bipartisan bills in all types of legislatures.
-
-\begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-7-1} \caption{Passed Bill Sponsorship Rates}\label{fig:unnamed-chunk-7}
-\end{figure}
-
-We can see how well bipartisan bills do when we look at hit rate of bills passed by partisanship. In fact, bipartisan bills pass at higher rates in unified majority legislatures than they do in split majority states.
-
-\begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-8-1} \caption{Hit Rate of Sponsored Bills}\label{fig:unnamed-chunk-8}
-\end{figure}
-
 \hypertarget{sponsor-ideology}{%
 \subsection{Sponsor Ideology}\label{sponsor-ideology}}
 
-We begin with examining the universe of bill introductions, divided by legislative control: unified Democratic or Republican, and split control.
+Sponsor party, of course, is a crude measure of bill content. While still extremely useful as a typology, there is substantial internal ideological heterogeneity in modern American political parties (reference Shor and McCarty 2022, Shor and McCarty 2011). Modern ideal point estimation techniques (Shor and McCarty 2011, Clinton et al 2014) allow us to measure the latent concept of ideology using the observed roll call votes of legislators with an extremely finely-grained continuous measure.
+
+Assuming that legislators have at least a major objective in moving policy in their preferred direction (``ideal point''), I use sponsor ideology as a second proxy measure of bill content.
 
 Democratic chambers feature lots of liberal and moderate bill introductions, while Republican legislatures show no special place for conservative bills. In fact, there is not much difference between Republican and split majority legislatures.
 
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-9-1} \caption{Introduced Bills by Sponsor Ideology}\label{fig:unnamed-chunk-9}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-8-1} \caption{Introduced Bills by Sponsor Ideology}\label{fig:unnamed-chunk-8}
 \end{figure}
 
-What about bills that actually passed? The disparity is even greater. Passed conservative bills in Democratic chambers are half as frequent as passed liberal bills in Republican legislatures.
+What about the minority of bills that actually passed? The disparity is even greater. Moderate bills tend to do very well in all types of legislative context. However, liberal bills do surprisingly well in Republican states, where they constitute only a few percentage points less than do conservative bills. In contrast, liberal bills in Democratic legislatures constitute nearly four times as many passed bills as conservative ones.
+
+Republican majority chambers look no different than split majority chambers -- they both pass moderate bills, and a roughly even split of liberal and conservative bills. But Democratic states look very different.
 
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-10-1} \caption{Passed Bill Sponsorship Rates}\label{fig:unnamed-chunk-10}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-9-1} \caption{Passed Bill Sponsorship Rates, By Ideology}\label{fig:unnamed-chunk-9}
 \end{figure}
 
-Next we look at hit rate of bills passed by partisanship. Moderate bills continue to do very well, especially in Republican legislatures.
+Next we look at hit rate of bills passed by ideology Moderate bills do very well, especially in Republican legislatures. And while liberal bills do almost as well in Republican legislatures as in Democratic ones, conservative bills do half as well in Democratic legislatures as compared with Republican ones.
 
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-11-1} \caption{Hit Rate of Sponsored Bills, by Sponsor Ideology}\label{fig:unnamed-chunk-11}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-10-1} \caption{Hit Rate of Sponsored Bills, by Sponsor Ideology}\label{fig:unnamed-chunk-10}
 \end{figure}
 
 \hypertarget{trends}{%
@@ -701,7 +713,7 @@ Next we look at hit rate of bills passed by partisanship. Moderate bills continu
 The liberal advantage for health bills has existed for a decade and a half. The plot below shows the median sponsor ideology for passed bills in the entire United States. It has gone up and down a little over time, but has only ever been near zero once, in the wake of the 2016 elections. In other words, in every single year of the data, policy has been moving more leftward than rightward across the country as a whole.
 
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-12-1} \caption{Average Passed Bill Sponsor Ideology over Time}\label{fig:unnamed-chunk-12}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-12-1} \caption{Average Passed Bill Sponsor Ideology over Time}\label{fig:unnamed-chunk-12}
 \end{figure}
 
 Now we split the country into the familiar three categories. Examining the median sponsor ideology shows that bills sponsored in Democratic states are amongst the most liberal quarter in the state -- and have been getting more liberal over time.
@@ -709,7 +721,7 @@ Now we split the country into the familiar three categories. Examining the media
 Strikingly, the same is true for bills in Republican states. These are sponsored by the equivalent of the most liberal \textbf{quarter} of Republicans.
 
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-13-1} \caption{Average Passed Bill Sponsor Ideology over Time by Majority Party}\label{fig:unnamed-chunk-13}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-13-1} \caption{Average Passed Bill Sponsor Ideology over Time by Majority Party}\label{fig:unnamed-chunk-13}
 \end{figure}
 
 \clearpage
@@ -722,36 +734,36 @@ Liberal bills do better in Democratic majority states than conservative bills in
 We can see this by looking at the percentage of liberal bills passed in the states. Blue states are unsurprisingly the home of liberal bills.
 
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-15-1} \caption{Passed Liberal Bills by State}\label{fig:unnamed-chunk-15}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-15-1} \caption{Passed Liberal Bills by State}\label{fig:unnamed-chunk-15}
 \end{figure}
 
 While red states disproportionally feature the passage of conservative bills, it is not nearly to the commensurate degree.
 
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-16-1} \caption{Passed Conservative Bills by State}\label{fig:unnamed-chunk-16}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-16-1} \caption{Passed Conservative Bills by State}\label{fig:unnamed-chunk-16}
 \end{figure}
 
 Moving from a categorial to a continuous measure, we can see the median bill sponsor for passed bills across the country. Notice that, while the median passed bill in Texas and Florida is moderately conservative, the equivalent in California and New York is a strongly liberal bill.
 
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-17-1} \caption{Median Sponsor}\label{fig:unnamed-chunk-17}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-17-1} \caption{Median Sponsor}\label{fig:unnamed-chunk-17}
 \end{figure}
 
 We combine the trend and state information in the following slopegraph. The figure in some respects is unsurprising. States like California and Washington State pass consistently liberal bills, while states like Arizona and Oklahoma pass consistently conservative bills. Other states exhibit understandable transitions, like Arkansas and West Virginia which have become much more conservative over time. What is surprising are large states like Florida and Texas passing health bills very often times authored by liberals.
 
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-19-1} \caption{State Bill Sponsorship Trends by State, Northeast}\label{fig:unnamed-chunk-19}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-19-1} \caption{State Bill Sponsorship Trends by State, Northeast}\label{fig:unnamed-chunk-19}
 \end{figure}
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-20-1} \caption{State Bill Sponsorship Trends by State, Midwest}\label{fig:unnamed-chunk-20}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-21-1} \caption{State Bill Sponsorship Trends by State, South}\label{fig:unnamed-chunk-21}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-20-1} \caption{State Bill Sponsorship Trends by State, Midwest}\label{fig:unnamed-chunk-20}
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-22-1} \caption{State Bill Sponsorship Trends by State, West}\label{fig:unnamed-chunk-22}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-21-1} \caption{State Bill Sponsorship Trends by State, South}\label{fig:unnamed-chunk-21}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-22-1} \caption{State Bill Sponsorship Trends by State, West}\label{fig:unnamed-chunk-22}
 \end{figure}
 
 \hypertarget{partisan-asymmetry}{%
@@ -779,7 +791,7 @@ Majority party rolls
 The figure below shows the raw data. Of course, rolls happen in chamber votes. But in keeping with the focus on bills in this chapter, I aggregate to the bill level. Thus, the data shows the times rolls happen within any roll call on a given bill, as a percentage of all bills that ever had a floor vote.
 
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-23-1} \caption{Majority Party Rolls Vary by Party}\label{fig:unnamed-chunk-23}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/unnamed-chunk-23-1} \caption{Majority Party Rolls Vary by Party}\label{fig:unnamed-chunk-23}
 \end{figure}
 
 \hypertarget{describing-the-data---public-opinion}{%
@@ -788,7 +800,7 @@ The figure below shows the raw data. Of course, rolls happen in chamber votes. B
 \hypertarget{data}{%
 \section{Data}\label{data}}
 
-Four waves of surveys have been conducted over the 2018-2022 time period, with a total of 15,572 respondents. Across all four waves, a total of 45 dichotomous survey responses about health-related policy issues, and 94 dichotomous survey responses about non-health related policy issues were asked.
+Four waves of surveys have been conducted over the 2018-2022 time period, with a total of 39,098 respondents. Across all four waves, a total of 47 dichotomous survey responses about health-related policy issues, and 106 dichotomous survey responses about non-health related policy issues were asked. Of course, these questions were not all asked at the same time. The median number of health related questions that were answered was 16 (and 38 for non-health related questions).
 
 \hypertarget{self-reported-vs-latent}{%
 \section{Self-reported vs Latent}\label{self-reported-vs-latent}}
@@ -811,9 +823,9 @@ The correlations are all in the expected range. Partisanship is strongly correla
   & Party ID & Self-Reported Ideology & Latent Health Ideology & Latent Nonhealth Ideology\\
 \midrule
 Party ID & 1 & . & . & .\\
-Self-Reported Ideology & \num{.67} & 1 & . & .\\
-Latent Health Ideology & \num{.51} & \num{.52} & 1 & .\\
-Latent Nonhealth Ideology & \num{.63} & \num{.67} & \num{.65} & 1\\
+Self-Reported Ideology & \num{.59} & 1 & . & .\\
+Latent Health Ideology & \num{.48} & \num{.44} & 1 & .\\
+Latent Nonhealth Ideology & \num{.59} & \num{.60} & \num{.65} & 1\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -822,20 +834,12 @@ Notice, however, that the correlations of \emph{health} ideology are substantial
 
 More broadly, notice that ideology is substantially less polarized in general than the typical picture for politicians like state legislators and members of Congress, where there is either vanishingly little or even no overlap in the density curves for partisans. The public's ideology looks familiar, but it is in no way a mirror image of politicians' belief systems.
 
-\begin{verbatim}
-## Warning: Removed 1377 rows containing non-finite values (stat_density).
-\end{verbatim}
-
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/ideology-density-party-1} \caption{Health and Non-health latent ideology by 3-category party identification}\label{fig:ideology-density-party}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/ideology-density-party-1} \caption{Health and Non-health latent ideology by 3-category party identification}\label{fig:ideology-density-party}
 \end{figure}
 
-\begin{verbatim}
-## Warning: Removed 1377 rows containing non-finite values (stat_density).
-\end{verbatim}
-
 \begin{figure}
-\includegraphics[width=0.99\linewidth]{Shor-Book_files/figure-latex/ideology-density-selfid-1} \caption{Health and Non-health latent ideology by 7-category self-reported ideology}\label{fig:ideology-density-selfid}
+\includegraphics[width=0.95\linewidth]{Shor-Book_files/figure-latex/ideology-density-selfid-1} \caption{Health and Non-health latent ideology by 7-category self-reported ideology}\label{fig:ideology-density-selfid}
 \end{figure}
 
 \hypertarget{predicting-issue-opinion}{%
@@ -855,28 +859,31 @@ But what kind of ideology? Health-related latent ideology appears to be a much s
 \toprule
   & ACA Approval & COVID School Mandate & Medicaid Expansion & Insulin Price Cap\\
 \midrule
-Health Latent Ideology & \num{-0.201}*** & \num{-0.460}*** & \num{-0.596}*** & \num{-0.324}***\\
- & (\num{0.011}) & (\num{0.017}) & (\num{0.008}) & (\num{0.018})\\
-Non-Health Latent Ideology & \num{-0.215}*** & \num{-0.069}** & \num{-0.072}*** & \num{0.009}\\
- & (\num{0.013}) & (\num{0.023}) & (\num{0.009}) & (\num{0.022})\\
-Republican & \num{-0.339}*** & \num{-0.175}*** & \num{0.037}*** & \num{0.022}\\
- & (\num{0.012}) & (\num{0.020}) & (\num{0.010}) & (\num{0.020})\\
-Independent & \num{-0.190}*** & \num{-0.124}*** & \num{0.072}*** & \num{-0.043}*\\
- & (\num{0.013}) & (\num{0.021}) & (\num{0.010}) & (\num{0.021})\\
-Self Reported Ideology & \num{-0.038}*** & \num{-0.025} & \num{0.038}*** & \num{-0.025}\\
- & (\num{0.011}) & (\num{0.017}) & (\num{0.009}) & (\num{0.019})\\
+Health Latent Ideology & \num{-0.340}*** & \num{-0.325}*** & \num{-0.541}*** & \num{-0.400}***\\
+ & (\num{0.006}) & (\num{0.008}) & (\num{0.005}) & (\num{0.008})\\
+Non-Health Latent Ideology & \num{-0.134}*** & \num{-0.058}*** & \num{-0.090}*** & \num{0.036}***\\
+ & (\num{0.007}) & (\num{0.010}) & (\num{0.006}) & (\num{0.010})\\
+Republican & \num{-0.253}*** & \num{-0.198}*** & \num{0.048}*** & \num{0.031}***\\
+ & (\num{0.006}) & (\num{0.009}) & (\num{0.006}) & (\num{0.009})\\
+Independent & \num{-0.091}*** & \num{-0.175}*** & \num{0.093}*** & \num{-0.043}***\\
+ & (\num{0.006}) & (\num{0.009}) & (\num{0.005}) & (\num{0.009})\\
+Self Reported Ideology & \num{-0.052}*** & \num{-0.070}*** & \num{0.034}*** & \num{-0.017}*\\
+ & (\num{0.005}) & (\num{0.008}) & (\num{0.005}) & (\num{0.008})\\
 \midrule
-Num.Obs. & \num{7775} & \num{2875} & \num{10237} & \num{4502}\\
-R2 & \num{0.441} & \num{0.435} & \num{0.493} & \num{0.117}\\
-R2 Adj. & \num{0.440} & \num{0.434} & \num{0.493} & \num{0.116}\\
-AIC & \num{6280.7} & \num{2413.4} & \num{5068.4} & \num{5638.5}\\
-BIC & \num{6329.4} & \num{2455.2} & \num{5119.0} & \num{5683.4}\\
-Log.Lik. & \num{-3133.343} & \num{-1199.712} & \num{-2527.207} & \num{-2812.237}\\
-RMSE & \num{0.36} & \num{0.37} & \num{0.31} & \num{0.45}\\
+Num.Obs. & \num{29386} & \num{18358} & \num{30996} & \num{21211}\\
+R2 & \num{0.431} & \num{0.290} & \num{0.428} & \num{0.152}\\
+R2 Adj. & \num{0.431} & \num{0.290} & \num{0.428} & \num{0.152}\\
+AIC & \num{23034.2} & \num{19966.1} & \num{18857.1} & \num{26621.6}\\
+BIC & \num{23092.2} & \num{20020.8} & \num{18915.5} & \num{26677.3}\\
+Log.Lik. & \num{-11510.100} & \num{-9976.061} & \num{-9421.551} & \num{-13303.804}\\
+RMSE & \num{0.36} & \num{0.42} & \num{0.33} & \num{0.45}\\
 \bottomrule
 \multicolumn{5}{l}{\rule{0pt}{1em}+ p $<$ 0.1, * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001}\\
 \end{tabular}
 \end{table}
+
+\hypertarget{placebo-test}{%
+\subsection{Placebo Test}\label{placebo-test}}
 
 Is health-related ideology always and everywhere a better measure of policy attitudes? Certainly not. See the following set of placebo models as an example. This shows the exact same models as above, except with three non-health related policy measures as dependent variables. These including support for fracking, the death penalty, and concealled carry policy for guns. In all cases, non-health related ideology is strongly positively related with positions on these issues; that is, a respondent who is more conservative on this scale is more likely to take the conservative position on these three hot-button ideological issues. That's not a surprise. What is surprising is how the sign on health ideology flips in the opposite direction. Here, controlling for non-health ideology, health conservatism predicts a liberal position on these issues. Of course, this weird result is likely a statistical artifact of multicollinearity between the measures. Still, it shows that our health measure works appropriately in the correct context, and--just as important--works poorly in the incorrect context. It has passed the placebo test.
 
@@ -888,24 +895,24 @@ Is health-related ideology always and everywhere a better measure of policy atti
 \toprule
   & Fracking & Death Penalty & Guns CC\\
 \midrule
-Health Latent Ideology & \num{-0.281}*** & \num{-0.144}*** & \num{-0.089}***\\
- & (\num{0.016}) & (\num{0.013}) & (\num{0.013})\\
-Non-Health Latent Ideology & \num{0.730}*** & \num{0.489}*** & \num{0.368}***\\
- & (\num{0.020}) & (\num{0.015}) & (\num{0.015})\\
-Republican & \num{0.004} & \num{0.044}** & \num{0.153}***\\
- & (\num{0.018}) & (\num{0.015}) & (\num{0.015})\\
-Independent & \num{-0.095}*** & \num{0.012} & \num{0.072}***\\
- & (\num{0.019}) & (\num{0.016}) & (\num{0.016})\\
-Self Reported Ideology & \num{-0.002} & \num{-0.016} & \num{0.023}\\
- & (\num{0.017}) & (\num{0.015}) & (\num{0.015})\\
+Health Latent Ideology & \num{-0.327}*** & \num{-0.245}*** & \num{-0.196}***\\
+ & (\num{0.009}) & (\num{0.007}) & \vphantom{1} (\num{0.007})\\
+Non-Health Latent Ideology & \num{0.642}*** & \num{0.421}*** & \num{0.376}***\\
+ & (\num{0.011}) & (\num{0.008}) & \vphantom{1} (\num{0.008})\\
+Republican & \num{-0.008} & \num{0.065}*** & \num{0.180}***\\
+ & (\num{0.011}) & (\num{0.008}) & (\num{0.008})\\
+Independent & \num{-0.097}*** & \num{0.010} & \num{0.096}***\\
+ & (\num{0.010}) & (\num{0.008}) & (\num{0.008})\\
+Self Reported Ideology & \num{0.030}*** & \num{0.023}** & \num{0.028}***\\
+ & (\num{0.009}) & (\num{0.007}) & (\num{0.007})\\
 \midrule
-Num.Obs. & \num{4488} & \num{8289} & \num{8266}\\
-R2 & \num{0.317} & \num{0.203} & \num{0.207}\\
-R2 Adj. & \num{0.316} & \num{0.202} & \num{0.206}\\
-AIC & \num{4771.0} & \num{9783.9} & \num{9766.3}\\
-BIC & \num{4815.9} & \num{9833.0} & \num{9815.4}\\
-Log.Lik. & \num{-2378.521} & \num{-4884.940} & \num{-4876.140}\\
-RMSE & \num{0.41} & \num{0.44} & \num{0.44}\\
+Num.Obs. & \num{15039} & \num{26654} & \num{26663}\\
+R2 & \num{0.245} & \num{0.136} & \num{0.170}\\
+R2 Adj. & \num{0.245} & \num{0.136} & \num{0.170}\\
+AIC & \num{17514.0} & \num{33285.4} & \num{32518.0}\\
+BIC & \num{17567.3} & \num{33342.7} & \num{32575.3}\\
+Log.Lik. & \num{-8749.989} & \num{-16635.688} & \num{-16251.978}\\
+RMSE & \num{0.43} & \num{0.45} & \num{0.45}\\
 \bottomrule
 \multicolumn{4}{l}{\rule{0pt}{1em}+ p $<$ 0.1, * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001}\\
 \end{tabular}
@@ -965,28 +972,60 @@ The specific model I use here is a simple linear probability model. While a gene
 \tightlist
 \item
   Bill sponsored by conservatives suffer in Democratic states, and vice versa for Republican states; but the penalty is greater in the former for being ideologically out-of-step.
-\item
-  Controversial bills that encounter one or more party unity votes along the way are much less likely to be passed, whereas non-controversial bills that see one or more unanimous roll calls along the way are more more likely to be passed.
 \end{itemize}
 
-\hypertarget{legislature-level-results}{%
-\subsection{Legislature level results}\label{legislature-level-results}}
-
 \begin{itemize}
-\tightlist
 \item
-  Moderate Democratic are \emph{much} less likely to pass any bill than liberal Democratic legislatures
+  Majority party conservatism is
 \item
-  Conservative Republican legislatures are somewhat less likely to pass any bill than moderate Republican legislatures
+  Moderate Democratic are less likely to pass any bill than liberal Democratic legislatures
+\item
+  Conservative Republican legislatures are less likely to pass any bill than moderate Republican legislatures
 \item
   Polarized legislatures are bad for the passage of any legislation, in either Republican or Democratic unified legislatures.
 \end{itemize}
 
-We can plot the marginal effect of our key variables. Figure \ref{fig:sponsor-effect} shows the effect of bill conservatism. Bill sponsored by conservatives suffer in Democratic states, and vice versa for Republican states; but the penalty is greater in the former for being ideologically out-of-step.
+\begin{table}
 
-Figure \ref{fig:leg-effect} shows the effect of legislative ideology. Moderate Democratic are \emph{much} less likely to pass any bill than liberal Democratic legislatures. Conservative Republican legislatures are somewhat less likely to pass any bill than moderate Republican legislatures.
+\caption{\label{tab:billmodel}Bill Passage Models (All)}
+\centering
+\begin{tabular}[t]{lccc}
+\toprule
+  & Democratic Majority & Republican Majority & Split Majority\\
+\midrule
+Majority Party Conservatism & \num{-0.058}*** & \num{-0.080}*** & \num{0.006}*\\
+ & (\num{<0.001}) & (\num{<0.001}) & (\num{0.020})\\
+Sponsor Conservatism & \num{-0.053}*** & \num{0.041}*** & \num{0.009}*\\
+ & (\num{<0.001}) & (\num{<0.001}) & (\num{0.021})\\
+Democratic Only Sponsors & \num{-0.025}*** & \num{-0.138}*** & \num{-0.008}\\
+ & (\num{<0.001}) & (\num{<0.001}) & (\num{0.367})\\
+Republican Only Sponsors & \num{-0.037}*** & \num{-0.107}*** & \num{0.007}\\
+ & (\num{<0.001}) & (\num{<0.001}) & (\num{0.491})\\
+Polarization & \num{-0.064}*** & \num{-0.010} & \num{-0.007}\\
+ & (\num{<0.001}) & (\num{0.353}) & (\num{0.702})\\
+Sponsor Count & \num{0.003}*** & \num{0.004}*** & \num{0.002}***\\
+ & (\num{<0.001}) & (\num{<0.001}) & \vphantom{1} (\num{<0.001})\\
+Sponsor Ideological Range & \num{0.080}*** & \num{0.036}*** & \num{0.025}***\\
+ & (\num{<0.001}) & (\num{<0.001}) & (\num{<0.001})\\
+\midrule
+Num.Obs. & \num{76642} & \num{76967} & \num{24203}\\
+R2 Marg. & \num{0.063} & \num{0.084} & \num{0.019}\\
+R2 Cond. & \num{0.277} & \num{0.199} & \num{0.375}\\
+AIC & \num{65253.4} & \num{82975.1} & \num{11425.8}\\
+BIC & \num{65364.3} & \num{83095.4} & \num{11531.1}\\
+RMSE & \num{0.37} & \num{0.41} & \num{0.30}\\
+\bottomrule
+\multicolumn{4}{l}{\rule{0pt}{1em}+ p $<$ 0.1, * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001}\\
+\end{tabular}
+\end{table}
 
-Figure \ref{fig:leg-effect} shows the effect of legislative polarization. Polarized legislatures are bad for the passage of any legislation, in either Republican or Democratic unified legislatures.
+We can plot the marginal effect of our key variables. Figure \ref{fig:sponsor-effect} shows the effect of bill (sponsor) conservatism and bill (sponsor) partisanship, separated by Democratic and Republican majorities. I drop showing split majorities, for which I do not have predictions for the key predictors (and which show mostly insignificant results for them).
+
+Bill sponsored by conservatives suffer in Democratic states, and vice versa for Republican states; but the penalty is greater in the former for being ideologically out-of-step. Bipartisan bills do really well, and most especially in Republican legislatures.
+
+\begin{figure}
+\includegraphics[width=0.5\linewidth]{Shor-Book_files/figure-latex/sponsor-effect-1} \includegraphics[width=0.5\linewidth]{Shor-Book_files/figure-latex/sponsor-effect-2} \caption{Passage probability as a function of sponsor ideology}\label{fig:sponsor-effect}
+\end{figure}
 
 \hypertarget{vote-models}{%
 \chapter{Vote Models}\label{vote-models}}
@@ -1066,11 +1105,11 @@ Table \ref{tab:votemodel-ncsl} and \ref{tab:votemodel-all} shows the results of 
   & Democrat & Republican\\
 \midrule
 Intercept & \num{0.457}*** & \num{0.399}***\\
- & (\num{0.000}) & \vphantom{1} (\num{0.000})\\
-District Conservatism & \num{0.001} & \num{-0.004}*\\
+ & (\num{<0.001}) & \vphantom{1} (\num{<0.001})\\
+District Conservatism & \num{0.0005} & \num{-0.004}*\\
  & (\num{0.713}) & (\num{0.044})\\
 Legislator Conservatism & \num{-0.035}*** & \num{-0.034}***\\
- & (\num{0.000}) & (\num{0.000})\\
+ & (\num{<0.001}) & (\num{<0.001})\\
 Observations & 159,333 & 180,398\\
 \midrule
 AIC & \num{-234138.6} & \num{-130622.2}\\
@@ -1085,23 +1124,25 @@ Log.Lik. & \num{117080.282} & \num{65322.102}\\
 
 \caption{\label{tab:votemodel-all}Search Vote Models}
 \centering
-\begin{tabular}[t]{lcc}
+\begin{tabular}[t]{lccc}
 \toprule
-  & Democrat & Republican\\
+  & Democratic & Bipartisan & Republican\\
 \midrule
-Intercept & \num{0.518}*** & \num{0.366}***\\
- & (\num{0.000}) & \vphantom{1} (\num{0.000})\\
-District Conservatism & \num{0.000} & \num{-0.011}***\\
- & (\num{0.973}) & (\num{0.000})\\
-Legislator Conservatism & \num{-0.081}*** & \num{-0.075}***\\
- & (\num{0.000}) & (\num{0.000})\\
-Observations & 795,548 & 877,219\\
+Intercept & \num{0.801}*** & \num{0.734}*** & \num{0.621}***\\
+ & (\num{<0.001}) & (\num{<0.001}) & \vphantom{2} (\num{<0.001})\\
+Legislator Conservatism & \num{-0.134}*** & \num{-0.105}*** & \num{0.005}+\\
+ & (\num{<0.001}) & (\num{<0.001}) & (\num{0.064})\\
+District Conservatism & \num{0.036}*** & \num{0.037}*** & \num{0.029}***\\
+ & (\num{<0.001}) & (\num{<0.001}) & \vphantom{1} (\num{<0.001})\\
+Republican & \num{-0.173}*** & \num{0.066}*** & \num{0.190}***\\
+ & (\num{<0.001}) & (\num{<0.001}) & (\num{<0.001})\\
+Observations & 704,944 & 1,120,133 & 877,214\\
 \midrule
-AIC & \num{-316398.3} & \num{215385.1}\\
-BIC & \num{-316270.8} & \num{215513.6}\\
-Log.Lik. & \num{158210.152} & \num{-107681.549}\\
+AIC & \num{35652.4} & \num{166980.6} & \num{109638.8}\\
+BIC & \num{35790.0} & \num{167123.8} & \num{109779.0}\\
+RMSE & \num{0.23} & \num{0.24} & \num{0.24}\\
 \bottomrule
-\multicolumn{3}{l}{\rule{0pt}{1em}+ p $<$ 0.1, * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001}\\
+\multicolumn{4}{l}{\rule{0pt}{1em}+ p $<$ 0.1, * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001}\\
 \end{tabular}
 \end{table}
 
@@ -1110,6 +1151,10 @@ The intercept can be read as the average probability of voting yea, holding both
 Legislator ideology is highly statistically and substantively significant. A one unit shift in ideology (eg, going from a moderate to a conservative Republican, or a moderate to liberal Democrat) results in roughly an 8 percentage point increase in the search data. The coefficients are also significant in the NCSL data, but only about half as large. Interestingly, there is not much difference in the effect of ideology on the voting behavior of members of both major parties.
 
 We can plot the marginal effect of our key variable of interest. Figure \ref{fig:ideology-pred} shows the effect of legislator ideology.
+
+\begin{figure}
+\includegraphics[width=0.5\linewidth]{Shor-Book_files/figure-latex/ideology-pred-1} \includegraphics[width=0.5\linewidth]{Shor-Book_files/figure-latex/ideology-pred-2} \includegraphics[width=0.5\linewidth]{Shor-Book_files/figure-latex/ideology-pred-3} \caption{Vote probability as a function of individual legislator ideology}\label{fig:ideology-pred}
+\end{figure}
 
 District ideology has no apparent effect on Democratic voting behavior, and a tiny one (in the expected direction) on Republican voting behavior.
 
